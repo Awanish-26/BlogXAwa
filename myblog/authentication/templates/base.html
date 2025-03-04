@@ -36,18 +36,19 @@
           <a href="/">Home</a>
         </li>
         {% if request.user.is_authenticated %}
-        <div class="dropdown">
-          <li class="dropbtn"><a href="#">{{ request.user.first_name|default:request.user.username|title }}</a></li>
-          <div class="dropdown-content">
-            <a href="{% url 'changepassword' %}">changepassword</a>
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <a href=""><button type="submit">Logout</button></a>
-            </form>
-          </div>
-        </div>
         <li>
-          <a href="{% url 'post_create' %}">New post <i class="bi bi-plus"></i></a>
+          <a aria-disabled="true">
+            {{ request.user.first_name|default:request.user.username|title }}
+          </a>
+        </li>
+        <li>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <a href=""><button type="submit">Logout</button></a>
+          </form>
+        </li>
+        <li>
+          <a href="{% url 'changepassword' %}">changepassword</a>
         </li>
         {% else %}
         <li>

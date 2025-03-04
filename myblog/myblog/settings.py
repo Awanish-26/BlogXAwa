@@ -1,17 +1,18 @@
 from pathlib import Path
 import os
-import environ
+import environ  # type: ignore
 env = environ.Env()
 environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-3051_oyc_*k1t!v*v%6@w(x4yhv!857r4fdfmywovw^!%)8jba'
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['awanish996.pythonanywhere.com']
+ALLOWED_HOSTS = ['awanish996.pythonanywhere.com', '*']
 
 INSTALLED_APPS = [
+    'authentication.apps.AuthenticationConfig',
     'blog.apps.BlogConfig',
     'django.contrib.admin',
     'django.contrib.auth',

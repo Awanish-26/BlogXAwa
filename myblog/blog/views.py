@@ -1,23 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Post
-from .forms import PostForm, EmailPostForm, SignupForm, EditPost, PasswordChange
-from django.contrib import messages
+from .forms import PostForm, EmailPostForm
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth import update_session_auth_hash
-# , login_required
+
 
 # Home page view
-
-
 def post_list(request):
     posts = Post.objects.all()
     return render(request, 'blog/post_list.html', {'posts': posts})
 
+
 # post detail view
-
-
 def post_detail(request, pk):
     post = Post.objects.get(pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
@@ -27,7 +23,7 @@ def post_detail(request, pk):
 @login_required
 def post_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST,request.FILES)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
@@ -41,15 +37,14 @@ def post_create(request):
 @login_required
 def edit(request, pk):
     post = get_object_or_404(Post, pk=pk, author=request.user)
-    post.save()
     if request.method == 'POST':
-        form = EditPost(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
-            post.save()
+            form.save()
             messages.success(request, "Updated succesfully")
             return redirect('post_list')
     else:
-        form = EditPost(instance=post)
+        form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
@@ -60,9 +55,8 @@ def delete(request, pk):
     messages.success(request, "Item deleted Succesfully")
     return redirect('/')
 
+
 # post share view
-
-
 def post_share(request, pk):
     post = Post.objects.get(pk=pk)
     sent = False
@@ -82,49 +76,3 @@ def post_share(request, pk):
     else:
         form = EmailPostForm()
     return render(request, 'blog/share.html', {'post': post, 'form': form})
-
-# Sign up view
-
-
-def register(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "User created successfullly")
-            return redirect('/')
-
-    else:
-        form = SignupForm()
-    return render(request, 'registration/register.html', {'form': form})
-
-
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChange(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            # Important to update the session with the new password hash
-            update_session_auth_hash(request, user)
-            messages.success(
-                request, 'Your password was successfully updated!')
-            return redirect('/')  # Redirect to a success page
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = PasswordChange(request.user)
-    return render(request, 'registration/passwordChange.html', {'form': form})
-
-
-# def passwordReset(request):
-#     if request.method == 'POST':
-#         form = PasswordReset(request.POST)
-#         if form.is_valid():
-#             messages.success(request, 'Check your Mail')
-#             return redirect('/')  # Redirect to a success page
-#         else:
-#             messages.error(request, 'Please correct the error below.')
-#     else:
-#         form = PasswordReset()
-#     return render(request, 'registration/reset_password.html', {'form': form})

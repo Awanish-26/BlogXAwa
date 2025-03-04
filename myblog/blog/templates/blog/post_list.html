@@ -1,33 +1,28 @@
 {% extends 'base.html' %}
 {% block title %}
-  Home
+Home
 {% endblock %}
 
 {% block content %}
 <section>
   <div class="container">
-        <div class="main">
-    <div class="heading">
-      <h1>Recent posts</h1>
-    </div>
-    <div class="blog_list">
-      {% for post in posts %}
+    <div class="main">
+      <div class="heading">
+        <h1>Recent posts</h1>
+      </div>
+      <div class="blog_list">
+        {% for post in posts %}
         <div class="blog_card">
           <div>
-            <img src="{{ post.banner.url }}" alt="post image">
-          </div>
-          <div>
-            <a href="{% url 'post_detail' post.pk %}">{{ post.title | truncatewords:10 }}</a>
+            <h2>{{ post.title | truncatewords:10 }}</h2>
             <hr>
-            <p>{{post.content|truncatewords:40}}</p>
+            <p>{{post.content|truncatewords:50}}</p>
+            <a type="button" class="btn-sec" href="{% url 'post_detail' post.pk %}">Read more</a>
           </div>
         </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
-    <div class="access-link">
-      <a href="{% url 'post_create' %}"><button>New post <i class="bi bi-plus"></i></button></a>
-    </div>
-  </div>
   </div>
 
 </section>

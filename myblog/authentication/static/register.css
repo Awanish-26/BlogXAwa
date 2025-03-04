@@ -17,12 +17,7 @@ label{
     grid-column: span 2;
 }
 
-.two , .three{
-    background-color: rgba(127, 255, 212, 0.5);
-    border-radius: 8px;
-}
-
-.three{
+.two ,.three{
     display: flex;
     flex-direction: column;
     vertical-align: middle;
@@ -36,6 +31,11 @@ label{
     border: 0;
     background-color: unset;
     margin-top: 2rem;
+}
+
+.btn-primary{
+    padding: 5px 12px;
+    font-size: 1.2rem;
 }
 
 @media screen and (max-width: 786px) {
