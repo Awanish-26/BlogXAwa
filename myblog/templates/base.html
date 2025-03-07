@@ -9,7 +9,8 @@
     Code Times |{% block title %}
     {% endblock %}
   </title>
-  <link rel="stylesheet" href="{% static 'base.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+  <!-- To add additional files in individual page -->
   {% block link %} {% endblock %}
   <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon" />
   {% comment %}
@@ -36,27 +37,30 @@
           <a href="/">Home</a>
         </li>
         {% if request.user.is_authenticated %}
+        <div class="dropdown">
+          <li class="dropbtn"><a href="#">{{ request.user.first_name|default:request.user.username|title }}</a></li>
+          <div class="dropdown-content">
+            <a href="{% url 'changepassword' %}">changepassword</a>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <a href=""><button type="submit">Logout</button></a>
+            </form>
+          </div>
+        </div>
         <li>
-          <a aria-disabled="true">
-            {{ request.user.first_name|default:request.user.username|title }}
-          </a>
-        </li>
-        <li>
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <a href=""><button type="submit">Logout</button></a>
-          </form>
-        </li>
-        <li>
-          <a href="{% url 'changepassword' %}">changepassword</a>
+          <a href="{% url 'post_create' %}">New post <i class="bi bi-plus"></i></a>
         </li>
         {% else %}
+        {% if request.path != "/login/" %}
         <li>
           <a href="{% url 'login' %}">Login</a>
         </li>
+        {% endif %}
+        {% if request.path != "/register/" %}
         <li>
           <a href="{% url 'register' %}">SignUp</a>
         </li>
+        {% endif %}
         {% endif %}
       </ul>
     </div>
@@ -75,7 +79,7 @@
   {% endblock %}
 
   <!-- JS -->
-  <script src="{% static 'base.js' %}"></script>
+  <script src="{% static 'js/base.js' %}"></script>
 </body>
 
 </html>

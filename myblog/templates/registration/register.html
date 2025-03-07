@@ -5,7 +5,7 @@ Signup
 {% endblock %}
 
 {% block link %}
-<link rel="stylesheet" href="{% static 'register.css' %}">
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@ Signup
     </div>
 
     <div class="main two">
-      <img src="{% static 'favicon/signup.svg' %}" alt="">
+      <img src="{% static 'images/signup.svg' %}" alt="">
     </div>
 
     <div class="main three">
@@ -57,14 +57,10 @@ Signup
           {% endif %}
 
           <button type="submit" class="btn btn-primary">Sign Up</button>
+          <div class="form-group">
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+          </div>
         </form>
-      </div>
-      <div class="main four">
-        <div class="form">
-          <p>
-            Already have a account, try <a href="{% url 'login' %}">login</a>
-          </p>
-        </div>
       </div>
     </div>
 

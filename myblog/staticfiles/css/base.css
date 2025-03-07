@@ -346,47 +346,6 @@ textarea:focus {
 
 
 
-/* All forms  */
-.form {
-  border: 1px solid var(--c-three);
-  border-radius: 6px;
-  background-color: var(--c-three);
-  padding: 16px 12px;
-}
-
-.form-group {
-  margin-block: 12px;
-}
-
-.form-group input {
-  width: 100%;
-  font-size: 16px;
-  padding: 6px 10px;
-  border: 1px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-bottom: 2px solid var(--c-two);
-}
-
-.form-group input:focus {
-  outline: none;
-}
-
-.form-group label {
-  font-size: 24px;
-  font-family: "Poppins", sans-serif;
-  display: block;
-}
-
-.alert {
-  width: 100%;
-  height: auto;
-  padding: 16px 8px;
-  text-align: center;
-  background-color: var(--c-one);
-  color: var(--c-four);
-}
-
 /* bottom links */
 
 .access-link a button {

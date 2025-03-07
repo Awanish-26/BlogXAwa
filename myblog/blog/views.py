@@ -76,3 +76,13 @@ def post_share(request, pk):
     else:
         form = EmailPostForm()
     return render(request, 'blog/share.html', {'post': post, 'form': form})
+
+
+@login_required
+def like_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return redirect('post_detail', pk=pk)
