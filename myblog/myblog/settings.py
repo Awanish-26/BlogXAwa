@@ -1,15 +1,23 @@
 from pathlib import Path
 import os
-import environ  # type: ignore
-env = environ.Env()
-environ.Env.read_env()
+from dotenv import load_dotenv
+from supabase import create_client
+load_dotenv()
+
+# Supabase credentials
+SUPABASE_URL = "https://xmczezqtdmjccwygsvww.supabase.co"
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+
+# Initialize Supabase
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-3051_oyc_*k1t!v*v%6@w(x4yhv!857r4fdfmywovw^!%)8jba'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['awanish996.pythonanywhere.com', '*']
+ALLOWED_HOSTS = ['awanish996.pythonanywhere.com', '127.0.0.1', '.vercel.app']
 
 INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
@@ -47,7 +55,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request',
             ],
         },
     },
@@ -58,8 +65,12 @@ WSGI_APPLICATION = 'myblog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.xmczezqtdmjccwygsvww',
+        'PASSWORD': '5Ub@%Hj6!tGMzYB',
+        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
+        'PORT': '6543',
     }
 }
 
@@ -104,10 +115,9 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = env('EMAIL_HOST')
-DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = 'smtp.gmail.com'
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# RECIPIENT_ADDRESS = env('RECIPIENT_ADDRESS')

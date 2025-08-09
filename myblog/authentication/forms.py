@@ -38,5 +38,5 @@ class PasswordChange(PasswordChangeForm):
 
 
 class PasswordReset(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'placeholder': 'Your email address...'}))
+    email = forms.EmailField(widget=forms.EmailInput(
+        attrs={'placeholder': 'Your email address...'}))

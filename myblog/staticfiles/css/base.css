@@ -17,7 +17,6 @@
 
 body {
   background-color: #212121;
-  
 }
 
 ::-webkit-scrollbar {
@@ -44,6 +43,7 @@ i {
   color: var(--c-four) !important;
 }
 
+/* == Base/NAV styling == */
 /* Navbar content start */
 .navbar {
   position: relative;
@@ -135,7 +135,7 @@ i {
   position: absolute;
   background-color: #3b3b3b;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -147,19 +147,20 @@ i {
   display: block;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f123}
+.dropdown-content a:hover {
+  background-color: #f1f1f123;
+}
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
-.dropdown-content button{
+.dropdown-content button {
   background-color: inherit;
   border: none;
   font-size: medium;
   color: var(--c-four);
-
 }
 
 .navlist li button,
@@ -188,29 +189,28 @@ section {
   padding: 1rem;
 }
 
-.main{
-  margin-inline:10%
+.main {
+  margin-inline: 10%;
 }
 .img_container {
   margin-block: 1rem;
+  color: var(--c-four);
 }
 
 .img_container img {
-  max-width: 60%;
+  max-width: 80%;
   border-radius: 1rem;
-  float: right;
+  margin-bottom: 1rem;
+  float: calc(50%-1rem);
+  margin-left: calc(12.5% - 1rem);
 }
 
-.created_at {
-  float: right;
+.likes_created_at {
+  display: flex;
+  justify-content: space-between;
   font-family: monospace !important;
   font-style: italic !important;
   font-size: 15px !important;
-}
-
-.created_by {
-  float: right !important;
-  color: var(--c-three) !important;
 }
 
 .heading {
@@ -283,9 +283,10 @@ textarea:focus {
   border-radius: 0.4em;
   overflow: hidden;
   line-height: 1em;
-  border: none
+  border: none;
 }
 
+/* == Blog Pages == */
 .blog_list {
   display: flex;
   flex-direction: column;
@@ -322,7 +323,7 @@ textarea:focus {
   font-size: 20px;
 }
 
-.btn-sec{
+.btn-sec {
   margin-top: auto;
   align-self: last baseline;
   color: var(--c-two);
@@ -333,6 +334,7 @@ textarea:focus {
 .blog_content {
   padding: 8px 12px;
   border-radius: 6px;
+  margin-bottom: 1rem;
 }
 
 .blog_content p {
@@ -344,7 +346,27 @@ textarea:focus {
   line-height: 1.4;
 }
 
+.user_info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.user_info > .author {
+  color: var(--c-three) !important;
+}
+
+.user_info > .edit_delete {
+  display: inline-block;
+  border: 1px solid var(--c-three);
+  border-radius: 4px;
+}
+
+.user_info > .edit_delete > a {
+  display: inline-block;
+  padding: 4px 12px;
+  border-collapse: collapse;
+}
 
 /* bottom links */
 
@@ -362,6 +384,30 @@ textarea:focus {
   background-color: var(--c-three);
   transition: background-color 200ms ease;
 }
+
+/* mesaaage section settings */
+.alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 1rem;
+  margin: 1rem auto;
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  background-color: var(--c-three);
+  color: var(--c-four);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.alert > button {
+  background-color: var(--c-three);
+  color: red;
+}
+
+/* == Registration Pages (login, register, password change/reset) == */
 
 @media screen and (max-width: 786px) {
   .navbar {
@@ -413,7 +459,7 @@ textarea:focus {
     float: none;
   }
 
-  .heading{
+  .heading {
     font-size: 12px;
   }
 }

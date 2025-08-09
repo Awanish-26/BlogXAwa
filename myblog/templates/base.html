@@ -1,85 +1,88 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Code Times |{% block title %}
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>
-    Code Times |{% block title %}
+      {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <!-- To add additional files in individual page -->
+    {% block link %}
+
     {% endblock %}
-  </title>
-  <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-  <!-- To add additional files in individual page -->
-  {% block link %} {% endblock %}
-  <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon" />
-  {% comment %}
-  <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon" />
+    {% comment %}
+    <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  </head>
 
-</head>
+  <body>
+    <div class="background" id="background"></div>
+    <nav class="navbar">
+      <div class="brand">
+        <h1><span style="color: rgb(255, 0, 85);">CODE</span> Times</h1>
+      </div>
+      <a href="#" class="toggle-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="36px" height="36px" fill="white">
+          <path d="M 3 7 A 1.0001 1.0001 0 1 0 3 9 L 27 9 A 1.0001 1.0001 0 1 0 27 7 L 3 7 z M 3 14 A 1.0001 1.0001 0 1 0 3 16 L 27 16 A 1.0001 1.0001 0 1 0 27 14 L 3 14 z M 3 21 A 1.0001 1.0001 0 1 0 3 23 L 27 23 A 1.0001 1.0001 0 1 0 27 21 L 3 21 z" />
+        </svg>
+      </a>
+      <div class="navlist">
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          {% if request.user.is_authenticated %}
+            <div class="dropdown">
+              <li class="dropbtn">
+                <a href="#">{{ request.user.first_name|default:request.user.username|title }}</a>
+              </li>
+              <div class="dropdown-content">
+                <a href="{% url 'changepassword' %}">changepassword</a>
+                <form method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <a href=""><button type="submit">Logout</button></a>
+                </form>
+              </div>
+            </div>
+            <li>
+              <a href="{% url 'post_create' %}">New post <i class="bi bi-plus"></i></a>
+            </li>
+          {% else %}
+            {% if request.path != '/login/' %}
+              <li>
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+            {% endif %}
+            {% if request.path != '/register/' %}
+              <li>
+                <a href="{% url 'register' %}">SignUp</a>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
 
-<body>
-  <div class="background" id="background"></div>
-  <nav class="navbar">
-    <div class="brand">
-      <h1><span style="color: rgb(255, 0, 85);">CODE</span> Times</h1>
-    </div>
-    <a href="#" class="toggle-button">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="36px" height="36px" fill="white">
-        <path
-          d="M 3 7 A 1.0001 1.0001 0 1 0 3 9 L 27 9 A 1.0001 1.0001 0 1 0 27 7 L 3 7 z M 3 14 A 1.0001 1.0001 0 1 0 3 16 L 27 16 A 1.0001 1.0001 0 1 0 27 14 L 3 14 z M 3 21 A 1.0001 1.0001 0 1 0 3 23 L 27 23 A 1.0001 1.0001 0 1 0 27 21 L 3 21 z" />
-      </svg>
-    </a>
-    <div class="navlist">
-      <ul>
-        <li>
-          <a href="/">Home</a>
-        </li>
-        {% if request.user.is_authenticated %}
-        <div class="dropdown">
-          <li class="dropbtn"><a href="#">{{ request.user.first_name|default:request.user.username|title }}</a></li>
-          <div class="dropdown-content">
-            <a href="{% url 'changepassword' %}">changepassword</a>
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <a href=""><button type="submit">Logout</button></a>
-            </form>
-          </div>
-        </div>
-        <li>
-          <a href="{% url 'post_create' %}">New post <i class="bi bi-plus"></i></a>
-        </li>
-        {% else %}
-        {% if request.path != "/login/" %}
-        <li>
-          <a href="{% url 'login' %}">Login</a>
-        </li>
-        {% endif %}
-        {% if request.path != "/register/" %}
-        <li>
-          <a href="{% url 'register' %}">SignUp</a>
-        </li>
-        {% endif %}
-        {% endif %}
-      </ul>
-    </div>
-  </nav>
+    {% comment %}messages{% endcomment %}
+    {% for msg in messages %}
+      <div class="alert">
+        {{ msg }}
+        <button style="border:0;" type="button" class="close" onclick="return this.parentNode.remove();"><i class="bi bi-x-lg"></i></button>
+      </div>
+    {% endfor %}
 
-  {% for msg in messages %}
-  <div class="alert" style="font-size: 16px;">
-    {{ msg }}
-    <button style="border:0;" type="button" class="close" onclick="return this.parentNode.remove();"><span><i
-          class="bi bi-x-lg"></i></span></button>
-  </div>
-  {% endfor %}
+    {% comment %}contents are extended here{% endcomment %}
+    {% block content %}
 
-  {% block content %}
-  {% comment %}contents are extended here{% endcomment %}
-  {% endblock %}
+    {% endblock %}
 
-  <!-- JS -->
-  <script src="{% static 'js/base.js' %}"></script>
-</body>
-
+    <!-- JS -->
+    <script src="{% static 'js/base.js' %}"></script>
+  </body>
 </html>

@@ -12,12 +12,12 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <p>
-          <label for="{{ form.banner.id_for_label }}">Banner:</label>
+          <label for="{{ form.banner.url }}">Banner:</label>
           <br>
           <div class="chk">
           Currently: 
-          {% if form.banner.value %}
-            <a href="{{ form.banner.value.url }}">{{ form.banner.value.name }}</a>
+          {% if form.banner %}
+            <a href="{{ form.banner.name }}">{{ form.image_name }}</a>
             <div class="chekbox">
               <input type="checkbox" name="banner-clear" id="banner-clear_id">
               <label for="banner-clear_id">Clear</label><br>
