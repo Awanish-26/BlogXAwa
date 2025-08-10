@@ -1,15 +1,15 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block title %}
-Overview
+  Overview
 {% endblock %}
 
 {% block content %}
-<section>
+  <section>
     <div class="container">
-        <div class="main">
-            <h1>Hi,{{ request.user.get_full_name }}</h1>
-        </div>
+      <div class="main">
+        <h1>Hi,{{ request.user }}</h1>
+      </div>
     </div>
-</section>
+  </section>
 {% endblock %}

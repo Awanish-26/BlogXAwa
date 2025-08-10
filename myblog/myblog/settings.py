@@ -99,8 +99,8 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIRS = [BASE_DIR / 'staticfiles']
+STATIC_ROOT = BASE_DIR / 'static' # isme collectstatic command se static files aayengi
+STATICFILES_DIRS = [BASE_DIR / 'staticfiles'] # isme static files rakhenge
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

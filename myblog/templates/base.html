@@ -1,88 +1,67 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Code Times |{% block title %}
-
+      {% block title %}
+        My Blog
       {% endblock %}
     </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    <!-- To add additional files in individual page -->
-    {% block link %}
-
+    {% block style %}
     {% endblock %}
-    <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' %}" type="image/x-icon" />
-    {% comment %}
-    <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   </head>
 
   <body>
-    <div class="background" id="background"></div>
-    <nav class="navbar">
-      <div class="brand">
-        <h1><span style="color: rgb(255, 0, 85);">CODE</span> Times</h1>
-      </div>
-      <a href="#" class="toggle-button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="36px" height="36px" fill="white">
-          <path d="M 3 7 A 1.0001 1.0001 0 1 0 3 9 L 27 9 A 1.0001 1.0001 0 1 0 27 7 L 3 7 z M 3 14 A 1.0001 1.0001 0 1 0 3 16 L 27 16 A 1.0001 1.0001 0 1 0 27 14 L 3 14 z M 3 21 A 1.0001 1.0001 0 1 0 3 23 L 27 23 A 1.0001 1.0001 0 1 0 27 21 L 3 21 z" />
-        </svg>
-      </a>
-      <div class="navlist">
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          {% if request.user.is_authenticated %}
-            <div class="dropdown">
-              <li class="dropbtn">
-                <a href="#">{{ request.user.first_name|default:request.user.username|title }}</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'post_list' %}"><i class="fas fa-feather-alt"></i> MyBlog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
               </li>
-              <div class="dropdown-content">
-                <a href="{% url 'changepassword' %}">changepassword</a>
-                <form method="post" action="{% url 'logout' %}">
-                  {% csrf_token %}
-                  <a href=""><button type="submit">Logout</button></a>
-                </form>
-              </div>
-            </div>
-            <li>
-              <a href="{% url 'post_create' %}">New post <i class="bi bi-plus"></i></a>
-            </li>
-          {% else %}
-            {% if request.path != '/login/' %}
-              <li>
-                <a href="{% url 'login' %}">Login</a>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn btn-primary ms-2" href="{% url 'register' %}">Register</a>
               </li>
             {% endif %}
-            {% if request.path != '/register/' %}
-              <li>
-                <a href="{% url 'register' %}">SignUp</a>
-              </li>
-            {% endif %}
-          {% endif %}
-        </ul>
+          </ul>
+        </div>
       </div>
     </nav>
 
-    {% comment %}messages{% endcomment %}
-    {% for msg in messages %}
-      <div class="alert">
-        {{ msg }}
-        <button style="border:0;" type="button" class="close" onclick="return this.parentNode.remove();"><i class="bi bi-x-lg"></i></button>
-      </div>
-    {% endfor %}
+    <div class="container mt-5 pt-4">
+      <main>
+        {% block content %}
 
-    {% comment %}contents are extended here{% endcomment %}
-    {% block content %}
+        {% endblock %}
+      </main>
+    </div>
 
-    {% endblock %}
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+      <p>
+        &copy; {% now 'Y' %}MyBlog. All rights reserved.
+      </p>
+    </footer>
 
-    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/base.js' %}"></script>
   </body>
 </html>

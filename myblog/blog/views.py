@@ -29,8 +29,8 @@ def post_list(request):
 
 
 # Post detail view
-def post_detail(request, pk, post):
-    post = get_object_or_404(Post, pk=pk, slug=post)
+def post_detail(request, pk,  slug):
+    post = get_object_or_404(Post, pk=pk, slug=slug)
     post.content = markdown.markdown(post.content, extensions=[
                                      'markdown.extensions.fenced_code'])
     return render(request, 'blog/post_detail.html', {'post': post})
@@ -168,4 +168,4 @@ def like_post(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return redirect('post_detail', pk=pk)
+    return redirect('post_detail', pk=pk, slug=post.slug)

@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
+
 {% block title %}
   Home
 {% endblock %}
 
 {% block content %}
-  <section>
-    <div class="container">
-      <div class="main">
-        <div class="heading">
-          <h1>Recent posts</h1>
-        </div>
-        <div class="blog_list">
-          {% for post in posts %}
-            <div class="blog_card">
-              <div>
-                <h2>{{ post.title|truncatewords:10 }}</h2>
-                <hr />
-                <p>{{ post.content|safe|truncatewords:50 }}</p>
-                <a type="button" rel="canonical" class="btn-sec" href="{% url 'post_detail' pk=post.id %}">Read more</a>
-              </div>
+  <div class="container mt-5">
+    <h1 class="mb-4">Recent Posts</h1>
+    <div class="row">
+      {% for post in posts %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if post.banner %}
+              <img src="{{ post.banner }}" class="card-img-top" alt="{{ post.title }}" />
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h5>
+              <p class="card-text">{{ post.content|safe|truncatewords:20 }}</p>
             </div>
-          {% endfor %}
+            <div class="card-footer">
+              <small class="text-muted">{{ post.created_at|date:'F d, Y' }}</small>
+            </div>
+          </div>
         </div>
-      </div>
+      {% endfor %}
     </div>
-  </section>
+  </div>
 {% endblock %}

@@ -1,60 +1,30 @@
 {% extends 'base.html' %}
+
 {% block title %}
   {{ post.title }}
 {% endblock %}
 
 {% block content %}
-  <section>
-    <div class="container">
-      <div class="main">
-        <div class="heading" style="text-align: center;">
-          <h1 style=" letter-spacing: 1px;">{{ post.title }}</h1>
-        </div>
-
-        <div class="blog_content">
-          <div>
-            <!-- Total no of likes and created_at -->
-            <p class="likes_created_at">
-              <span><i class="bi bi-heart"></i> {{ post.total_likes }}</span>
-              <span><i class="bi bi-vector-pen"></i> Created : {{ post.created_at.date }}</span>
-            </p>
-          </div>
-          <br />
-
-          <div class="img_container">
-            <img src="{{ post.banner }}" alt="{{ post.title }}" />
-            <p>{{ post.content|safe }}</p>
-            <br />
-          </div>
-
-          <p class="user_info">
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-8">
+        <article>
+          <header class="mb-4">
+            <h1 class="fw-bolder mb-1 text-capitalize">{{ post.title }}</h1>
+            <div class="fst-italic mb-2">Posted on {{ post.created_at|date:'F d, Y' }} by {{ post.author.username|title }}</div>
             {% if request.user == post.author %}
-              <span class="edit_delete">
-                <a href="{% url 'delete' post.id %}" style="border-right: 1px solid #15f5b9bb;" title="Delete"><i class="bi bi-trash" style="color: white;"></i></a>
-                <a href="{% url 'edit' post.id %}" title="Edit"><i class="bi bi-pen" style="color: white;"></i></a>
-              </span>
+              <a class="btn btn-sm btn-outline-primary" href="{% url 'edit' post.id %}">Edit</a>
+              <a class="btn btn-sm btn-outline-danger" href="{% url 'delete' post.id %}">Delete</a>
             {% endif %}
-            <span class="author"><i class="bi bi-person"></i> Author : {{ post.author.username|title }}</span>
-          </p>
-        </div>
-
-        <!-- link to share and return to home page -->
-        <div class="access-link">
-          <a href="{% url 'post_list' %}">
-            <button>
-              <span><i class="bi bi-arrow-left"></i></span>
-              Back to post list
-            </button>
-          </a>
-          <br />
-          <a href="{% url 'post_share' post.pk %}">
-            <button>
-              Share this post via Email
-              <span><i class="bi bi-send"></i></span>
-            </button>
-          </a>
-        </div>
+          </header>
+          {% if post.banner %}
+            <figure class="mb-4">
+              <img class="img-fluid rounded" src="{{ post.banner }}" alt="{{ post.title }}" />
+            </figure>
+          {% endif %}
+          <section class="mb-5">{{ post.content|safe }}</section>
+        </article>
       </div>
     </div>
-  </section>
+  </div>
 {% endblock %}
