@@ -1,100 +1,18 @@
-label{
-    color:white;
-    margin-bottom: 10px;
+.card {
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.container{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-}
-
-.main{
-    max-width: unset;
-}
-
-.one{
-    grid-column: span 2;
-}
-
-.two{
-    margin-right: 0;
-}
-.three{
-    margin-left: 0;
-}
-
-.four{
-    margin-top: auto;
-}
-
-.form{
-    border: 0;
-    background-color: unset;
-    margin-top: 2rem;
+.form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
 }
 
 .btn-primary {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    color: white;
-    background-color: var(--c-two);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #007bff;
+  border: none;
 }
 
 .btn-primary:hover {
-    background-color: var(--c-three);
-}
-
-/* All forms  */
-.form {
-  border: 1px solid var(--c-three);
-  border-radius: 6px;
-  padding: 16px 12px;
-}
-
-.form-group {
-  margin-block: 12px;
-}
-
-.form-group input {
-  color: wheat;
-  width: 100%;
-  font-size: 16px;
-  padding: 6px 10px;
-  border: 1px;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-bottom: 2px solid var(--c-two);
-}
-
-.form-group input:focus {
-  outline: none;
-}
-
-.form-group label {
-  font-size: 24px;
-  font-family: "Poppins", sans-serif;
-  display: block;
-}
-
-.alert {
-  width: 100%;
-  height: auto;
-  padding: 16px 8px;
-  text-align: center;
-  background-color: var(--c-one);
-  color: var(--c-four);
-}
-
-@media screen and (max-width: 786px) {
-    .container{
-        display: block;
-    }
-    .main img{
-        display: none;
-    }
+  background-color: #0056b3;
 }
