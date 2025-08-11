@@ -43,11 +43,13 @@ def post_create(request):
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
+
             if "banner" in request.FILES:
                 file = request.FILES["banner"]
                 file_data = file.read()
+
+                # Generate a unique file name
                 file_name = f"{uuid.uuid4()}.{file.name.split('.')[-1]}"
-                file_path = "uploads/" + file_name
 
                 # Validate file type
                 content_type = file.content_type
@@ -57,18 +59,20 @@ def post_create(request):
                     messages.error(request, "Unsupported file type.")
                     return redirect('post_create')
 
-                # Upload file to storage
-                supabase.storage.from_('uploads').upload(file_path, file_data, {
-                    'content-type': content_type,
-                })
+                # Upload file to the 'uploads' bucket with the new file_name
+                supabase.storage.from_('uploads').upload(
+                    path=file_name,
+                    file=file_data,
+                    file_options={'content-type': content_type}
+                )
 
-                # Generate signed URL
-                signed_url_response = supabase.storage.from_(
-                    'uploads').create_signed_url(file_path, 60 * 60 * 24)
-                public_url = signed_url_response['signedURL']
+                # Get the permanent public URL
+                public_url = supabase.storage.from_(
+                    'uploads').get_public_url(file_name)
 
                 # Assign banner and image name to post
                 post.banner = public_url
+                # Storing the original file name might be useful, but the key is the public_url
                 post.image_name = file.name
             else:
                 post.banner = None
