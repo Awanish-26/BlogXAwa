@@ -339,7 +339,7 @@ textarea:focus {
 }
 
 /* mesaaage section settings */
-.alert {
+/* .alert {
   position: fixed;
   top: 0;
   left: 0;
@@ -358,7 +358,7 @@ textarea:focus {
 .alert > button {
   background-color: var(--c-three);
   color: red;
-}
+} */
 
 /* == Registration Pages (login, register, password change/reset) == */
 
