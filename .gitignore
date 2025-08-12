@@ -146,3 +146,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+info.txt
+*.env
+myblog/.env
+venv
+*venv
+data.json
