@@ -152,3 +152,6 @@ myblog/.env
 venv
 *venv
 data.json
+.vercel
+build_files.sh
+vercel.json
