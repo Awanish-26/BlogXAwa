@@ -26,26 +26,26 @@
         <a class="navbar-brand" href="{% url 'post_list' %}"><i class="fas fa-feather-alt"></i> Awanish's Blog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto" >
+            <li class="nav-item me-5">
+              <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
+            </li>
             {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
-              </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
               </li>
               <li class="nav-item">
                 <form action="{% url 'logout' %}" method="post">
                   {% csrf_token %}
-                  <button type="submit" class="nav-link btn btn-link">Logout</button>
+                  <button type="submit" class="nav-link btn btn-link text-danger text-opacity-75">Logout</button>
                 </form>
               </li>
             {% else %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                <a class="nav-link btn btn-outline-secondary" href="{% url 'login' %}">Login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link btn btn-primary ms-2" href="{% url 'register' %}">Register</a>
+                <a class="nav-link bg-info bg-opacity-10 border border-2 border-info rounded ms-2" href="{% url 'register' %}">Register</a>
               </li>
             {% endif %}
           </ul>

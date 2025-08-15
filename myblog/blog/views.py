@@ -92,8 +92,9 @@ def post_create(request):
 def edit(request, pk):
     post = get_object_or_404(Post, pk=pk, author=request.user)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
+            post = form.save(commit=False)
             if "banner" in request.FILES:
                 file = request.FILES["banner"]
                 file_data = file.read()
@@ -120,6 +121,7 @@ def edit(request, pk):
                 # Assign banner and image name to post
                 post.banner = public_url
                 post.image_name = file.name
+
             post.save()
             messages.success(request, "Updated successfully")
             return redirect('post_list')
@@ -138,30 +140,6 @@ def delete(request, pk):
     post.delete()
     messages.success(request, "Item deleted successfully")
     return redirect('/')
-
-
-# Post share view
-def post_share(request, pk):
-    post = Post.objects.get(pk=pk)
-    if request.method == "POST":
-        form = EmailPostForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            send_mail(
-                subject=f"{cd['name']} recommends you to read a post",
-                message=f"{post.title}\n\n{cd['message']}",
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[cd['email']],
-                auth_user=settings.EMAIL_HOST_USER,
-                auth_password=settings.EMAIL_HOST_PASSWORD
-            )
-            messages.success(request, "Email sent successfully")
-            return redirect('/')
-        else:
-            messages.error(request, "Error sending email")
-    else:
-        form = EmailPostForm()
-    return render(request, 'blog/share.html', {'post': post, 'form': form})
 
 
 # Post like view

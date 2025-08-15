@@ -24,7 +24,35 @@
           {% endif %}
           <section class="mb-5">{{ post.content|safe }}</section>
         </article>
+
+        <!-- Share Button -->
+        <div class="mt-4">
+          <button id="share-btn" class="btn btn-outline-secondary">
+            <i class="fas fa-share-alt"></i> Share
+          </button>
+          <span id="share-message" class="text-success ms-2" style="display: none;">Link copied!</span>
+        </div>
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const shareButton = document.getElementById('share-btn');
+      const shareMessage = document.getElementById('share-message');
+
+      shareButton.addEventListener('click', function () {
+        const postUrl = window.location.href; // Get the current URL
+        navigator.clipboard.writeText(postUrl).then(() => {
+          // Show success message
+          shareMessage.style.display = 'inline';
+          setTimeout(() => {
+            shareMessage.style.display = 'none';
+          }, 2000); // Hide message after 2 seconds
+        }).catch(err => {
+          console.error('Failed to copy the link: ', err);
+        });
+      });
+    });
+  </script>
 {% endblock %}
