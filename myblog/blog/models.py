@@ -13,7 +13,7 @@ class Post(models.Model):
         MinLengthValidator(
             100, message="Content must be at least 100 characters long."),
         MaxLengthValidator(
-            5000, message="Content cannot exceed 2500 characters.")
+            10000, message="Content cannot exceed 10000 characters.")
     ])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
