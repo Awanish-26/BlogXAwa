@@ -155,3 +155,5 @@ data.json
 .vercel
 build_files.sh
 vercel.json
+launch.json
+chat.zip
