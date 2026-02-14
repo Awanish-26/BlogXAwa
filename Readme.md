@@ -1,6 +1,7 @@
 # BlogXAwa
 
 A Markdown-powered blog with user accounts, likes, profile page, and banner images stored in Supabase Storage. Built on Django 5 with a PostgreSQL backend and Vercel deployment support.
+![Project Image](assets/img.png)
 
 ## Highlights
 
