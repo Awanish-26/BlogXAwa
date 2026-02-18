@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from blog.models import Post
 # Create your views here.
 
 
 @login_required
 def profile(request):
-    return render(request, 'dashboard/profile.html')
+    posts = Post.objects.filter(author=request.user)
+    return render(request, 'dashboard/profile.html', {'posts': posts})
