@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: blogxa_test
+          POSTGRES_USER: blogxa_user
+          POSTGRES_PASSWORD: blogxa_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U blogxa_user -d blogxa_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      DEBUG: "False"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DB_NAME: blogxa_test
+      DB_USER: blogxa_user
+      DB_PASSWORD: blogxa_password
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+      EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+      - run: python manage.py check
+      - run: python manage.py migrate
+      - run: python manage.py test

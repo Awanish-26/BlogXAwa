@@ -9,15 +9,17 @@ SUPABASE_URL = "https://xmczezqtdmjccwygsvww.supabase.co"
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 # Initialize Supabase
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY if SUPABASE_KEY else "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = DEBUG = os.getenv("DEBUG", "False").lower() in {
+    "1", "true", "yes", "on"}
 
-ALLOWED_HOSTS = ['awanish996.pythonanywhere.com', '127.0.0.1', '.vercel.app']
+HOSTS = os.getenv('ALLOWED_HOSTS')
+ALLOWED_HOSTS = HOSTS.split(",") if HOSTS else []
 
 INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
@@ -66,11 +68,11 @@ WSGI_APPLICATION = 'myblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.xmczezqtdmjccwygsvww',
-        'PASSWORD': '5Ub@%Hj6!tGMzYB',
-        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',
-        'PORT': '6543',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
