@@ -15,8 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = DEBUG = os.getenv("DEBUG", "False").lower() in {
+DEBUG = os.getenv("DEBUG", "False").lower() in {
     "1", "true", "yes", "on"}
+
 
 HOSTS = os.getenv('ALLOWED_HOSTS')
 ALLOWED_HOSTS = HOSTS.split(",") if HOSTS else []
