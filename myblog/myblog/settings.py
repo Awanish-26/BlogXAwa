@@ -9,7 +9,7 @@ SUPABASE_URL = "https://xmczezqtdmjccwygsvww.supabase.co"
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 # Initialize Supabase
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY if SUPABASE_KEY else "")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
