@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
+  <div class="container post-detail-page">
     <div class="row">
       <div class="col-lg-8">
         <article>
@@ -27,32 +27,129 @@
 
         <!-- Share Button -->
         <div class="mt-4">
-          <button id="share-btn" class="btn btn-outline-secondary">
-            <i class="fas fa-share-alt"></i> Share
-          </button>
+          <button id="share-btn" class="btn btn-outline-secondary"><i class="fas fa-share-alt"></i> Share</button>
           <span id="share-message" class="text-success ms-2" style="display: none;">Link copied!</span>
         </div>
       </div>
     </div>
+
+    <aside class="ai-conversation-box" aria-label="AI conversation panel">
+      <div class="ai-conversation-header">
+        <div>
+          <p class="ai-conversation-kicker">AI Conversation</p>
+          <h2>Discuss this post</h2>
+        </div>
+        <span class="ai-conversation-status">Online</span>
+      </div>
+
+      <div class="ai-conversation-body" id="ai-conversation-body">
+        <div class="ai-message ai-message-bot">Ask for a summary, a simpler explanation, or follow-up ideas about this post.</div>
+      </div>
+
+      <form class="ai-conversation-form" id="ai-conversation-form">
+        <label class="visually-hidden" for="ai-conversation-input">Message</label>
+        <textarea id="ai-conversation-input" class="ai-conversation-input" rows="3" placeholder="Type your question about this post..."></textarea>
+        <button type="submit" class="btn btn-primary w-100">Send</button>
+      </form>
+    </aside>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const shareButton = document.getElementById('share-btn');
-      const shareMessage = document.getElementById('share-message');
-
+      const shareButton = document.getElementById('share-btn')
+      const shareMessage = document.getElementById('share-message')
+      const conversationForm = document.getElementById('ai-conversation-form')
+      const conversationBody = document.getElementById('ai-conversation-body')
+      const conversationInput = document.getElementById('ai-conversation-input')
+    
       shareButton.addEventListener('click', function () {
-        const postUrl = window.location.href; // Get the current URL
-        navigator.clipboard.writeText(postUrl).then(() => {
-          // Show success message
-          shareMessage.style.display = 'inline';
-          setTimeout(() => {
-            shareMessage.style.display = 'none';
-          }, 2000); // Hide message after 2 seconds
-        }).catch(err => {
-          console.error('Failed to copy the link: ', err);
-        });
-      });
-    });
+        const postUrl = window.location.href // Get the current URL
+        navigator.clipboard
+          .writeText(postUrl)
+          .then(() => {
+            // Show success message
+            shareMessage.style.display = 'inline'
+            setTimeout(() => {
+              shareMessage.style.display = 'none'
+            }, 2000) // Hide message after 2 seconds
+          })
+          .catch((err) => {
+            console.error('Failed to copy the link: ', err)
+          })
+      })
+    
+      conversationForm.addEventListener('submit', async function (event) {
+        event.preventDefault()
+    
+        const message = conversationInput.value.trim()
+        if (!message) {
+          return
+        }
+        const userBubble = document.createElement('div')
+        userBubble.className = 'ai-message ai-message-user'
+        userBubble.textContent = message
+        conversationBody.appendChild(userBubble)
+    
+        const replyBubble = document.createElement('div')
+        replyBubble.className = 'ai-message ai-message-bot'
+        conversationBody.appendChild(replyBubble)
+    
+        const response = await fetch('/chat/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        })
+    
+        if (!response.ok || !response.body) {
+          let errMsg = 'Request failed.'
+          try {
+            const err = await response.json()
+            errMsg = err.reply || errMsg
+          } catch (_) {}
+          replyBubble.textContent = errMsg
+          return
+        }
+    
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+        let sseBuffer = ''
+        let markdownBuffer = ''
+    
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) break
+    
+          sseBuffer += decoder.decode(value, { stream: true })
+          const events = sseBuffer.split('\n\n')
+          sseBuffer = events.pop() || ''
+    
+          for (const evt of events) {
+            const lines = evt.split('\n')
+            const eventLine = lines.find((l) => l.startsWith('event:'))
+            const dataLine = lines.find((l) => l.startsWith('data:'))
+            if (!eventLine || !dataLine) continue
+    
+            const eventType = eventLine.replace('event:', '').trim()
+            const dataText = dataLine.replace('data:', '').trim()
+    
+            if (eventType === 'token') {
+              const token = JSON.parse(dataText)
+              markdownBuffer += token
+    
+              // Use a markdown lib + sanitizer (recommended)
+              // replyBubble.innerHTML = DOMPurify.sanitize(marked.parse(markdownBuffer))
+              replyBubble.textContent = markdownBuffer
+              conversationBody.scrollTop = conversationBody.scrollHeight
+            }
+    
+            if (eventType === 'done') {
+              // finalize if needed
+            }
+          }
+        }
+    
+        conversationInput.value = ''
+      })
+    })
   </script>
 {% endblock %}

@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      BlogxAwa || 
-      {% block title %}
+      BlogxAwa ||{% block title %}
+
       {% endblock %}
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -26,7 +26,7 @@
         <a class="navbar-brand" href="{% url 'post_list' %}"><i class="fas fa-feather-alt"></i> BlogxAwa</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto" >
+          <ul class="navbar-nav ms-auto">
             <li class="nav-item me-5">
               <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
             </li>
@@ -53,15 +53,14 @@
       </div>
     </nav>
 
-    <div class="container mt-5 pt-4">
-      <main>
-        {% block content %}
+    <main class="mt-5">
+      <hr class="mt-5" />
+      {% block content %}
 
-        {% endblock %}
-      </main>
-    </div>
+      {% endblock %}
+    </main>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
+    <footer class="static-bottom bg-dark text-white text-center py-3 mt-5">
       <p>
         &copy;{% now 'Y' %}Awanish's Blog. All rights reserved.
       </p>

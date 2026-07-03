@@ -5,14 +5,34 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
+  <div class="container">
     <h1 class="mb-4">Recent Posts</h1>
     <div class="row">
       {% for post in posts %}
         <div class="col-md-4 mb-4">
-          <div class="card {% if post.banner %} h-100{% else %}  h-30{% endif %}">
+          <div class="card {% if post.banner %}
+              
+              
+              
+              
+               h-100
+
+
+
+
+            {% else %}
+              
+              
+              
+              
+                h-30
+
+
+
+
+            {% endif %}">
             {% if post.banner %}
-              <img src="{{ post.banner }}" class="card-img-top " alt="{{ post.title }}" />
+              <img src="{{ post.banner }}" class="card-img-top" alt="{{ post.title }}" />
             {% endif %}
             <div class="card-body">
               <h5 class="card-title"><a href="{{ post.get_absolute_url }}"><u>{{ post.title }}</u></a></h5>

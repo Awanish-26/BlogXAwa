@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'authentication.apps.AuthenticationConfig',
     'blog.apps.BlogConfig',
+    'agent.apps.AgentConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
