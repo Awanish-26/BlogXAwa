@@ -139,7 +139,6 @@ button i {
 
 section {
   background-color: var(--c-zero);
-  padding: 1rem;
 }
 
 .main {
@@ -262,23 +261,25 @@ textarea:focus {
 /* Post detail AI conversation panel */
 .post-detail-page {
   position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 .ai-conversation-box {
-  position: fixed;
+  position: sticky;
   top: 84px;
-  right: 12px;
-  width: 440px;
-  height: calc(100vh - 120px);
+  height: 80vh;
+  width: min(420px, 30vw);
+  min-width: 340px;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
-  border-radius: 18px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.96);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.14);
-  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.6);
 }
 
 .ai-conversation-header {

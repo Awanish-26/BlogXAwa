@@ -6,8 +6,8 @@
 
 {% block content %}
   <div class="container post-detail-page">
-    <div class="row">
-      <div class="col-lg-8">
+    <div class="row w-auto">
+      <div class="">
         <article>
           <header class="mb-4">
             <h1 class="fw-bolder mb-1 text-capitalize">{{ post.title }}</h1>
@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <aside class="ai-conversation-box" aria-label="AI conversation panel">
+    <div class="ai-conversation-box" aria-label="AI conversation panel">
       <div class="ai-conversation-header">
         <div>
           <p class="ai-conversation-kicker">AI Conversation</p>
@@ -51,7 +51,7 @@
         <textarea id="ai-conversation-input" class="ai-conversation-input" rows="3" placeholder="Type your question about this post..."></textarea>
         <button type="submit" class="btn btn-primary w-100">Send</button>
       </form>
-    </aside>
+    </div>
   </div>
 
   <script>
