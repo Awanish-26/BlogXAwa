@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Q
 
@@ -31,10 +32,25 @@ def post_list(request):
             Q(title__icontains=query) |
             Q(content__icontains=query)
         )
-    for post in posts:
-        post.content = markdown.markdown(post.content, extensions=[
-                                         'markdown.extensions.fenced_code'])
-    return render(request, 'blog/post_list.html', {'posts': posts, 'query': query})
+
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    for post in page_obj:
+        post.content = markdown.markdown(
+            post.content,
+            extensions=['markdown.extensions.fenced_code']
+        )
+
+    return render(
+        request,
+        'blog/post_list.html',
+        {
+            'posts': page_obj,
+            'query': query,
+        }
+    )
 
 
 # Post detail view

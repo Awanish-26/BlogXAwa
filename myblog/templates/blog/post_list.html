@@ -58,5 +58,45 @@
         </div>
       {% endfor %}
     </div>
+
+
+    <div class="d-flex justify-content-center mt-4">
+      <div class="d-flex align-items-center gap-2 bg-light border border-secondary-subtle rounded px-3 py-2 shadow-sm">
+        {% if posts.has_previous %}
+          <a href="?{% if query %}q={{ query|urlencode }}&{% endif %}page={{ posts.previous_page_number }}"
+             class="btn btn-sm btn-light border border-secondary text-dark rounded px-3 py-2">
+            Previous
+          </a>
+        {% else %}
+          <span class="btn btn-sm btn-light border border-secondary text-muted rounded px-3 py-2 disabled">
+            Previous
+          </span>
+        {% endif %}
+
+        {% for num in posts.paginator.page_range %}
+          {% if num == posts.number %}
+            <span class="btn btn-sm btn-dark text-white rounded px-3 py-2 fw-bold">
+              {{ num }}
+            </span>
+          {% else %}
+            <a href="?{% if query %}q={{ query|urlencode }}&{% endif %}page={{ num }}"
+               class="btn btn-sm btn-light border border-secondary text-dark rounded px-3 py-2">
+              {{ num }}
+            </a>
+          {% endif %}
+        {% endfor %}
+
+        {% if posts.has_next %}
+          <a href="?{% if query %}q={{ query|urlencode }}&{% endif %}page={{ posts.next_page_number }}"
+             class="btn btn-sm btn-light border border-secondary text-dark rounded px-3 py-2">
+            Next
+          </a>
+        {% else %}
+          <span class="btn btn-sm btn-light border border-secondary text-muted rounded px-3 py-2 disabled">
+            Next
+          </span>
+        {% endif %}
+      </div>
+    </div>
   </div>
 {% endblock %}
