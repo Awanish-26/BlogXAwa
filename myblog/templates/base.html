@@ -23,13 +23,42 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'post_list' %}"><i class="fas fa-feather-alt"></i> BlogxAwa</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <a class="navbar-brand" href="{% url 'post_list' %}">
+          <i class="fas fa-feather-alt"></i> BlogxAwa
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item me-5">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <li class="nav-item me-3">
+              <form method="get" action="{% url 'post_list' %}" class="relative">
+                <div class="flex items-center border border-gray-700 rounded bg-[#0d1117] px-2">
+                  <span class="text-white-50" aria-hidden="true">
+                    <i class="fas fa-search"></i>
+                  </span>
+
+                  <input
+                    id="navbar-search"
+                    type="search"
+                    name="q"
+                    value="{{ query|default:'' }}"
+                    placeholder="Type / to search"
+                    class="w-64 border-0 bg-transparent px-2 py-2 text-white placeholder:text-gray-400 focus:outline-none"
+                    aria-label="Search posts"
+                    style = "font-size:12px"
+                  />
+                </div>
+              </form>
+            </li>
+
+            <li class="nav-item me-4">
               <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
             </li>
+
             {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
@@ -45,7 +74,8 @@
                 <a class="nav-link btn btn-outline-secondary" href="{% url 'login' %}">Login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link bg-info bg-opacity-10 border border-2 border-info rounded ms-2" href="{% url 'register' %}">Register</a>
+                <a class="nav-link bg-info bg-opacity-10 border-2 border-info rounded ms-2"
+                  href="{% url 'register' %}">Register</a>
               </li>
             {% endif %}
           </ul>

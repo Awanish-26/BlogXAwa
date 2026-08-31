@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Q
 
 # Local imports
 from .models import Post
@@ -21,11 +22,19 @@ from myblog.settings import supabase
 
 # Home page view
 def post_list(request):
+    query = request.GET.get('q', '').strip()
+
     posts = Post.objects.all()
+
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
+        )
     for post in posts:
         post.content = markdown.markdown(post.content, extensions=[
                                          'markdown.extensions.fenced_code'])
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    return render(request, 'blog/post_list.html', {'posts': posts, 'query': query})
 
 
 # Post detail view

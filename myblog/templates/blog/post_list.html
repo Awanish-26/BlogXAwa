@@ -7,6 +7,19 @@
 {% block content %}
   <div class="container">
     <h1 class="mb-4">Recent Posts</h1>
+
+    {% if query %}
+      <p class="text-muted mb-3">
+        Showing {{ posts|length }} result{{ posts|pluralize }} for "{{ query }}"
+      </p>
+    {% endif %}
+
+    {% if not posts %}
+      <div class="alert alert-warning">
+        No posts found for "{{ query }}". Try another keyword.
+      </div>
+    {% endif %}
+
     <div class="row">
       {% for post in posts %}
         <div class="col-md-4 mb-4">
