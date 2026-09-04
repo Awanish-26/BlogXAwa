@@ -1,13 +1,32 @@
-const toggleButton = document.getElementsByClassName('toggle-button')[0]
 const navbarLinks = document.getElementsByClassName('navlist')[0]
 const alerts = document.querySelectorAll('.alert');
 
-toggleButton.addEventListener('click', () => {
-    navbarLinks.classList.toggle('active');
-});
 
 setTimeout(() => {
     alerts.forEach(alert => {
         alert.remove();
     });
 }, 6000);
+
+
+document.addEventListener('keydown', function (event) {
+    const activeTag = document.activeElement?.tagName;
+    const isTyping =
+        activeTag === 'INPUT' ||
+        activeTag === 'TEXTAREA' ||
+        document.activeElement?.isContentEditable;
+
+    const isSlash = event.key === '/' && !event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey;
+
+    if (isSlash && !isTyping) {
+        event.preventDefault();
+        const searchInput = document.getElementById('navbar-search');
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        }
+    }
+});
+
+document.querySelector('#id_category').classList.add('form-select')
+document.querySelector('#id_tags').classList.add('form-select')

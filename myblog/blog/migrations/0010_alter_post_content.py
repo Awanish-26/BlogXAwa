@@ -7,13 +7,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('blog', '0009_post_slug'),
+        ('blog', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='post',
             name='content',
-            field=models.TextField(validators=[django.core.validators.MinLengthValidator(100, message='Content must be at least 100 characters long.'), django.core.validators.MaxLengthValidator(10000, message='Content cannot exceed 10000 characters.')]),
+            field=models.TextField(validators=[django.core.validators.MinLengthValidator(
+                100, message='Content must be at least 100 characters long.'), django.core.validators.MaxLengthValidator(10000, message='Content cannot exceed 10000 characters.')]),
         ),
     ]

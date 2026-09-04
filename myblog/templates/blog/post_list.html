@@ -49,6 +49,11 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title"><a href="{{ post.get_absolute_url }}"><u>{{ post.title }}</u></a></h5>
+              {% if post.category %}
+                <a href="?category={{ post.category.slug }}" class="badge border border-primary text-primary text-decoration-none mb-2">
+                  {{ post.category.name }}
+                </a>
+              {% endif %}
               <p class="card-text">{{ post.content|striptags|truncatewords:20 }}</p>
             </div>
             <div class="card-footer">
@@ -97,6 +102,28 @@
           </span>
         {% endif %}
       </div>
+    </div>
+
+    <div class="my-4">
+      <strong>Categories:</strong>
+
+      <a href="{% url 'post_list' %}" class="fs-6 border rounded m-2 px-2 text-decoration-none" style="font-size:12px !important;">All</a>
+
+      {% for category in categories %}
+        <a href="?category={{ category.slug }}" class="fs-6 border rounded m-2 px-2 text-decoration-none" style="font-size:12px !important;">
+          {{ category.name }}
+        </a>
+      {% endfor %}
+    </div>
+
+    <div class="mb-4">
+      <strong>Tags:</strong>
+
+      {% for tag in tags %}
+        <a href="?tag={{ tag.slug }}" class="px-2 text-decoration-none" style="font-size:12px !important;">
+          #{{ tag.name }}
+        </a>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

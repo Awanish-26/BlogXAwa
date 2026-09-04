@@ -9,8 +9,12 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <h2>Create a New Post</h2>
+  <div class="container post-form-page">
+    <div class="post-form-heading">
+      <span class="post-form-eyebrow">Publish something worth reading</span>
+      <h1>Create a New Post</h1>
+      <p>Shape your idea, add a few details, and share it with the community.</p>
+    </div>
     <!-- Display form errors -->
     {% if form.errors %}
       <div class="alert alert-danger">
@@ -25,15 +29,25 @@
     {% endif %}
 
     {% comment %}Post creation form{% endcomment %}
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class="post-form">
       {% csrf_token %}
-      <div class="mb-3">
-        <label for="id_title" class="form-label">Title</label>
+      <div class="post-form-grid">
+        <div class="post-form-field post-form-field-wide">
+          <label for="id_title" class="form-label">Title <span>Required</span></label>
         {{ form.title }}
-      </div>
-      <div class="mb-3">
-        <label for="id_content" class="form-label">
-          Content<div class="markdown-helper">
+        </div>
+        <div class="post-form-field">
+          <label for="id_category" class="form-label">Category</label>
+          {{ form.category }}
+        </div>
+        <div class="post-form-field">
+          <label for="id_tags" class="form-label">Tags</label>
+          {{ form.tags }}
+          <small>Hold Ctrl or Command to select multiple tags.</small>
+        </div>
+        <div class="post-form-field post-form-field-wide">
+          <label for="id_content" class="form-label">Content <span>Required</span>
+            <div class="markdown-helper">
             <span class="text-info fs-6 fst-italic fw-light">(Markdown supported)</span>
             <div class="markdown-guide-panel">
               <h5>Markdown Guide</h5>
@@ -70,15 +84,20 @@
                 </li>
               </ul>
             </div>
-          </div>
-        </label>
+            </div>
+          </label>
         {{ form.content }}
-      </div>
-      <div class="mb-3">
-        <label for="id_banner" class="form-label">Banner Image</label>
+        </div>
+        <div class="post-form-field post-form-field-wide">
+          <label for="id_banner" class="form-label">Banner image <small>Optional</small></label>
         {{ form.banner }}
+          <small>PNG, JPG, or GIF. A wide image works best.</small>
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary">Create Post</button>
+      <div class="post-form-actions">
+        <a href="{% url 'post_list' %}" class="btn btn-light">Cancel</a>
+        <button type="submit" class="btn btn-primary">Publish Post</button>
+      </div>
     </form>
   </div>
 
@@ -87,6 +106,8 @@
       document.querySelector('#id_title').classList.add('form-control')
       document.querySelector('#id_content').classList.add('form-control')
       document.querySelector('#id_banner').classList.add('form-control')
+      document.querySelector('#id_category').classList.add('form-select')
+      document.querySelector('#id_tags').classList.add('form-select')
     
       // Markdown guide panel logic
       const helper = document.querySelector('.markdown-helper')

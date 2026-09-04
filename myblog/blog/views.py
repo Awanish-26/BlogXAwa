@@ -12,7 +12,7 @@ from django.conf import settings
 from django.db.models import Q
 
 # Local imports
-from .models import Post
+from .models import Post, Category, Tag
 from .forms import PostForm, EmailPostForm
 from myblog.settings import supabase
 
@@ -24,6 +24,8 @@ from myblog.settings import supabase
 # Home page view
 def post_list(request):
     query = request.GET.get('q', '').strip()
+    category = request.GET.get('category', '').strip()
+    tag = request.GET.get('tag', '').strip()
 
     posts = Post.objects.all()
 
@@ -32,6 +34,12 @@ def post_list(request):
             Q(title__icontains=query) |
             Q(content__icontains=query)
         )
+
+    if category:
+        posts = posts.filter(category__slug=category)
+
+    if tag:
+        posts = posts.filter(tags__slug=tag)
 
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
@@ -49,6 +57,10 @@ def post_list(request):
         {
             'posts': page_obj,
             'query': query,
+            'selected_category': category,
+            'selected_tag': tag,
+            'categories': Category.objects.all(),
+            'tags': Tag.objects.all(),
         }
     )
 
@@ -105,6 +117,7 @@ def post_create(request):
 
             post.author = request.user
             post.save()
+            form.save_m2m()
             messages.success(request, "Post created successfully")
             return redirect('post_list')
     else:
@@ -148,6 +161,7 @@ def edit(request, pk):
                 post.image_name = file.name
 
             post.save()
+            form.save_m2m()
             messages.success(request, "Updated successfully")
             return redirect('post_list')
     else:

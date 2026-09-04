@@ -27,3 +27,6 @@ document.addEventListener('keydown', function (event) {
         }
     }
 });
+
+document.querySelector('#id_category').classList.add('form-select')
+document.querySelector('#id_tags').classList.add('form-select')

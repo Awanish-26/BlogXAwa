@@ -5,6 +5,22 @@ from django.utils.text import slugify
 from django.urls import reverse
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Post(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(
@@ -21,6 +37,9 @@ class Post(models.Model):
         max_length=500, blank=True, null=True)
     image_name = models.CharField(max_length=500, blank=True, null=True)
     likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
 
     def total_likes(self):
         return self.likes.count()
