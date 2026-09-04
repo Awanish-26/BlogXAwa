@@ -1,6 +1,7 @@
 # Standard library imports
 import uuid
 import markdown
+from django.utils import timezone
 
 # Django imports
 from django.shortcuts import render, redirect, get_object_or_404
@@ -10,6 +11,7 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Q
+from django.views.decorators.http import require_POST
 
 # Local imports
 from .models import Post, Category, Tag
@@ -27,7 +29,7 @@ def post_list(request):
     category = request.GET.get('category', '').strip()
     tag = request.GET.get('tag', '').strip()
 
-    posts = Post.objects.all()
+    posts = Post.objects.filter(is_published=True)
 
     if query:
         posts = posts.filter(
@@ -66,10 +68,23 @@ def post_list(request):
 
 
 # Post detail view
-def post_detail(request, pk,  slug):
-    post = get_object_or_404(Post, pk=pk, slug=slug)
-    post.content = markdown.markdown(post.content, extensions=[
-                                     'markdown.extensions.fenced_code'])
+def post_detail(request, pk, slug):
+    filters = Q(is_published=True)
+
+    if request.user.is_authenticated:
+        filters |= Q(author=request.user)
+
+    post = get_object_or_404(
+        Post.objects.filter(filters),
+        pk=pk,
+        slug=slug,
+    )
+
+    post.content = markdown.markdown(
+        post.content,
+        extensions=['markdown.extensions.fenced_code'],
+    )
+
     return render(request, 'blog/post_detail.html', {'post': post})
 
 
@@ -116,6 +131,14 @@ def post_create(request):
                 post.image_name = None
 
             post.author = request.user
+
+            if request.POST.get('action') == 'publish':
+                post.is_published = True
+                post.published_at = timezone.now()
+            else:
+                post.is_published = False
+                post.published_at = None
+
             post.save()
             form.save_m2m()
             messages.success(request, "Post created successfully")
@@ -190,3 +213,24 @@ def like_post(request, pk):
     else:
         post.likes.add(request.user)
     return redirect('post_detail', pk=pk, slug=post.slug)
+
+
+@login_required
+@require_POST
+def publish_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    post.is_published = True
+    post.published_at = timezone.now()
+    post.save(update_fields=['is_published', 'published_at'])
+    messages.success(request, 'Post published successfully.')
+    return redirect('profile')
+
+
+@login_required
+@require_POST
+def unpublish_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, author=request.user)
+    post.is_published = False
+    post.save(update_fields=['is_published'])
+    messages.success(request, 'Post moved back to drafts.')
+    return redirect('profile')

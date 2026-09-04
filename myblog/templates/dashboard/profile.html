@@ -1,24 +1,52 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  Overview
+  Profile
 {% endblock %}
 
 {% block content %}
   <div class="container">
-    <h1>Welcome ,{{ request.user }}</h1>
-    <h2>Your Posts</h2>
-    {% if posts %}
+    <h1>Welcome, {{ request.user }}</h1>
+
+    <h2>Published Posts</h2>
+    {% if published_posts %}
       <ul>
-        {% for post in posts %}
+        {% for post in published_posts %}
           <li>
             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-            <small>{{ post.created_at|date:'M d, Y' }}</small>
+            <small>{{ post.published_at|date:'M d, Y' }}</small>
+            <a href="{% url 'edit' post.id %}">Edit</a>
+
+            <form method="post" action="{% url 'unpublish_post' post.id %}">
+              {% csrf_token %}
+              <button type="submit">Move to Drafts</button>
+            </form>
           </li>
         {% endfor %}
       </ul>
     {% else %}
-      <p>You haven't created any posts yet.</p>
+      <p>You have no published posts.</p>
+    {% endif %}
+
+    <h2>Your Drafts</h2>
+    {% if drafts %}
+      <ul>
+        {% for post in drafts %}
+          <li>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            <small>{{ post.created_at|date:'M d, Y' }}</small>
+            <span>Draft</span>
+            <a href="{% url 'edit' post.id %}">Edit</a>
+
+            <form method="post" action="{% url 'publish_post' post.id %}">
+              {% csrf_token %}
+              <button type="submit">Publish</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You have no drafts.</p>
     {% endif %}
   </div>
 {% endblock %}

@@ -96,7 +96,13 @@
       </div>
       <div class="post-form-actions">
         <a href="{% url 'post_list' %}" class="btn btn-light">Cancel</a>
-        <button type="submit" class="btn btn-primary">Publish Post</button>
+        <button type="submit" name="action" value="draft" class="btn btn-outline-info">
+          Save Draft
+        </button>
+        
+        <button type="submit" name="action" value="publish" class="btn btn-outline-success">
+          Publish Post
+        </button>
       </div>
     </form>
   </div>

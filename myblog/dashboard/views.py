@@ -7,4 +7,12 @@ from blog.models import Post
 @login_required
 def profile(request):
     posts = Post.objects.filter(author=request.user)
-    return render(request, 'dashboard/profile.html', {'posts': posts})
+
+    return render(
+        request,
+        'dashboard/profile.html',
+        {
+            'drafts': posts.filter(is_published=False),
+            'published_posts': posts.filter(is_published=True),
+        },
+    )
