@@ -39,6 +39,45 @@
           <button id="share-btn" class="btn btn-outline-secondary"><i class="fas fa-share-alt"></i> Share</button>
           <span id="share-message" class="text-success ms-2" style="display: none;">Link copied!</span>
         </div>
+
+        {% if post.is_published %}
+          <section class="mt-5" aria-labelledby="comments-heading">
+            <h2 id="comments-heading">Comments</h2>
+
+            {% if request.user.is_authenticated %}
+              <form method="post" action="{% url 'comment_create' post.id %}" class="mb-4">
+                {% csrf_token %}
+                {{ comment_form.content }}
+                {% if comment_form.content.errors %}
+                  <div class="text-danger">{{ comment_form.content.errors }}</div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary mt-2">Add comment</button>
+              </form>
+            {% else %}
+              <p><a href="{% url 'login' %}?next={{ request.path|urlencode }}">Log in</a> to comment.</p>
+            {% endif %}
+
+            {% for comment in comments %}
+              <article class="border-bottom py-3">
+                <p class="mb-1">{{ comment.content|linebreaksbr }}</p>
+                <small class="text-muted">
+                  By {{ comment.author.username }} on {{ comment.created_at|date:'M d, Y H:i' }}
+                </small>
+                {% if request.user == comment.author %}
+                  <div class="mt-2">
+                    <a href="{% url 'comment_edit' comment.id %}">Edit</a>
+                    <form method="post" action="{% url 'comment_delete' comment.id %}" class="d-inline">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-link p-0 text-danger">Delete</button>
+                    </form>
+                  </div>
+                {% endif %}
+              </article>
+            {% empty %}
+              <p class="text-muted">No comments yet.</p>
+            {% endfor %}
+          </section>
+        {% endif %}
       </div>
     </div>
 

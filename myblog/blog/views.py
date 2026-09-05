@@ -14,8 +14,8 @@ from django.db.models import Q
 from django.views.decorators.http import require_POST
 
 # Local imports
-from .models import Post, Category, Tag
-from .forms import PostForm, EmailPostForm
+from .models import Comment, Post, Category, Tag
+from .forms import CommentForm, PostForm, EmailPostForm
 from myblog.settings import supabase
 
 # ------------------------------
@@ -85,7 +85,52 @@ def post_detail(request, pk, slug):
         extensions=['markdown.extensions.fenced_code'],
     )
 
-    return render(request, 'blog/post_detail.html', {'post': post})
+    return render(request, 'blog/post_detail.html', {
+        'post': post,
+        'comments': post.comments.select_related('author'),
+        'comment_form': CommentForm() if request.user.is_authenticated else None,
+    })
+
+
+@login_required
+@require_POST
+def comment_create(request, pk):
+    post = get_object_or_404(Post, pk=pk, is_published=True)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.author = request.user
+        comment.save()
+        messages.success(request, 'Comment added.')
+    return redirect('post_detail', pk=post.pk, slug=post.slug)
+
+
+@login_required
+def comment_edit(request, pk):
+    comment = get_object_or_404(Comment, pk=pk, author=request.user)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Comment updated.')
+            return redirect('post_detail', pk=comment.post.pk, slug=comment.post.slug)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'blog/comment_edit.html', {
+        'form': form,
+        'comment': comment,
+    })
+
+
+@login_required
+@require_POST
+def comment_delete(request, pk):
+    comment = get_object_or_404(Comment, pk=pk, author=request.user)
+    post = comment.post
+    comment.delete()
+    messages.success(request, 'Comment deleted.')
+    return redirect('post_detail', pk=post.pk, slug=post.slug)
 
 
 # Post creation view

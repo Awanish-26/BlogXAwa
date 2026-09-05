@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Comment, Post
 
 
 class PostForm(forms.ModelForm):
@@ -10,6 +10,18 @@ class PostForm(forms.ModelForm):
             "title": forms.TextInput(attrs={'placeholder': 'Enter the title here...'}),
             "banner": forms.FileInput(attrs={'accept': 'image/*'}),
             "content": forms.Textarea(attrs={"rows": 12, 'placeholder': 'Enter your text here...'}),
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 4,
+                'placeholder': 'Write a comment...',
+            }),
         }
 
 
